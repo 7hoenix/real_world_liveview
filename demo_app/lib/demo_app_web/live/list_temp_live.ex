@@ -4,9 +4,12 @@ defmodule DemoAppWeb.ListTempLive do
   def render(assigns) do
     ~L"""
     <button phx-click="add_item">Add Item to List</button>
-    <div id="container" phx-update="append">
-      <%= for item <- @list do %>
-      <div id="<%= item %>"><%= item %></div>
+    <div id="container" phx-update="append" %>
+      <%= for {mode, item} <- @list do %>
+      <div
+        id="<%= item %>" <%= if mode == :remove, do: "phx-remove" %> ><%= item %>
+        <button phx-click="remove_item" phx-value-item="<%= item %>">Remove</button>
+      </div>
       <% end %>
     </div>
     """
@@ -25,7 +28,14 @@ defmodule DemoAppWeb.ListTempLive do
 
     {:noreply,
      socket
-     |> assign(:list, [i])
+     |> assign(:list, [{:add, i}])
      |> assign(:next_index, i + 1)}
+  end
+
+  def handle_event("remove_item", %{"item" => item}, socket) do
+    IO.inspect(item)
+    {:noreply,
+      socket
+      |> assign(:list, [{:remove, item}])}
   end
 end
