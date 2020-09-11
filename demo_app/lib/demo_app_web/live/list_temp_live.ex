@@ -12,6 +12,9 @@ defmodule DemoAppWeb.ListTempLive do
       </div>
       <% end %>
     </div>
+    <div id="never">
+       Move me!
+    </div>
     """
   end
 
